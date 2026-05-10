@@ -3,33 +3,62 @@ const express = require("express");
 
 const app = express();
 
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-let may1 = "WAIT";
+let donhang = [];
 
 app.get("/", (req, res) => {
-  res.send("Máy bán gạo online 😄");
+
+res.send(`
+
+<h1>Máy Bán Gạo 🌾</h1>
+
+<form action="/dat" method="POST">
+
+<p>Tên:</p>
+<input name="ten" />
+
+<p>Số điện thoại:</p>
+<input name="sdt" />
+
+<p>Địa chỉ giao:</p>
+<input name="diachi" />
+
+<p>Số kg gạo:</p>
+<input name="soluong" />
+
+<br><br>
+
+<button type="submit">
+ĐẶT GẠO
+</button>
+
+</form>
+
+`);
+
 });
 
-app.get("/may1", (req, res) => {
-  res.send(may1);
+app.post("/dat", (req, res) => {
+
+donhang.push(req.body);
+
+console.log("Có đơn mới:");
+console.log(req.body);
+
+res.send("Đặt gạo thành công 😄");
+
 });
 
-app.post("/webhook", (req, res) => {
+app.get("/donhang", (req, res) => {
 
-  console.log(req.body);
+res.json(donhang);
 
-  may1 = "OPEN";
-
-  setTimeout(() => {
-    may1 = "WAIT";
-  }, 5000);
-
-  res.send("OK");
 });
 
 const PORT = process.env.PORT || 3000;
 
-app.listen(PORT, "0.0.0.0", () => {
-  console.log("Máy chủ đang chạy");
+app.listen(PORT, () => {
+console.log("Máy chủ đang chạy");
 });
